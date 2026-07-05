@@ -29,14 +29,14 @@ class AssetsTool
         $query->limit((int)($args['limit'] ?? 50));
         $query->offset((int)($args['offset'] ?? 0));
 
-        $assets = array_map(static function (Asset $a) {
+        $assets = array_map(static function(Asset $a) {
             return [
                 'id' => $a->id,
                 'filename' => $a->filename,
                 'title' => $a->title,
                 'kind' => $a->kind,
                 'folderId' => $a->folderId,
-                'url' => (function () use ($a) {
+                'url' => (function() use ($a) {
                     try {
                         return $a->getUrl();
                     } catch (\Throwable) {
@@ -120,7 +120,7 @@ class AssetsTool
         return [
             'id' => $asset->id,
             'filename' => $asset->filename,
-            'url' => (function () use ($asset) {
+            'url' => (function() use ($asset) {
                 try {
                     return $asset->getUrl();
                 } catch (\Throwable) {

@@ -31,7 +31,7 @@ class Plugin extends BasePlugin
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            static function (RegisterUrlRulesEvent $event): void {
+            static function(RegisterUrlRulesEvent $event): void {
                 $event->rules['mcp'] = 'mcp/mcp/index';
                 $event->rules['POST mcp'] = 'mcp/mcp/index';
             }

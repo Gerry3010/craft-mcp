@@ -2,7 +2,6 @@
 
 namespace gerry3010\mcp\mcp;
 
-use Craft;
 use craft\helpers\Json;
 use gerry3010\mcp\Plugin;
 use gerry3010\mcp\tools\ValidationException;

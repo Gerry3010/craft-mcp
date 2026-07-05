@@ -159,11 +159,11 @@ class Support
         // Assets -> {id, filename, url, kind}
         if ($field instanceof AssetsField) {
             $assets = $value instanceof ElementQueryInterface ? $value->all() : (is_iterable($value) ? $value : []);
-            return array_map(static function (Asset $a) {
+            return array_map(static function(Asset $a) {
                 return [
                     'id' => $a->id,
                     'filename' => $a->filename,
-                    'url' => (function () use ($a) {
+                    'url' => (function() use ($a) {
                         try {
                             return $a->getUrl();
                         } catch (\Throwable) {

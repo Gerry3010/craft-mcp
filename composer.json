@@ -36,6 +36,11 @@
         "developer": "Gerald Hofbauer",
         "documentationUrl": "https://github.com/Gerry3010/craft-mcp"
     },
+    "scripts": {
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "check-cs": "ecs check",
+        "fix-cs": "ecs check --fix"
+    },
     "config": {
         "sort-packages": true,
         "platform": {
