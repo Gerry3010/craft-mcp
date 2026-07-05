@@ -5,6 +5,7 @@ namespace gerry3010\mcp\tools;
 use Craft;
 use craft\elements\Entry;
 use craft\fieldlayoutelements\CustomField;
+use craft\fieldlayoutelements\entries\EntryTitleField;
 use craft\models\EntryType;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
@@ -33,18 +34,24 @@ class StructureTool
         }
 
         $entries = Craft::$app->getEntries();
-        $et = $entries->getEntryTypeByHandle($handle) ?? new EntryType();
+        $existing = $entries->getEntryTypeByHandle($handle);
+        $et = $existing ?? new EntryType();
         $et->handle = $handle;
         $et->name = $args['name'] ?? $et->name ?? $handle;
         if (array_key_exists('hasTitleField', $args)) {
             $et->hasTitleField = (bool)$args['hasTitleField'];
+        } elseif (!$existing) {
+            // Match the CP default: new entry types show the Title field.
+            $et->hasTitleField = true;
         }
         if (array_key_exists('titleFormat', $args)) {
             $et->titleFormat = $args['titleFormat'];
         }
 
-        if (array_key_exists('fields', $args) && is_array($args['fields'])) {
-            $et->setFieldLayout(self::buildLayout(Entry::class, $args['fields']));
+        // Build a field layout when fields are given, or for any new entry type
+        // (so the Title field element is present when hasTitleField is on).
+        if ((array_key_exists('fields', $args) && is_array($args['fields'])) || !$existing) {
+            $et->setFieldLayout(self::buildLayout(Entry::class, $args['fields'] ?? [], (bool)$et->hasTitleField));
         }
 
         if (!$entries->saveEntryType($et)) {
@@ -138,12 +145,22 @@ class StructureTool
     /**
      * Build a single-tab field layout from a list of existing field handles.
      */
-    private static function buildLayout(string $elementType, array $fieldHandles): FieldLayout
+    private static function buildLayout(string $elementType, array $fieldHandles, bool $includeTitle = false): FieldLayout
     {
         $layout = new FieldLayout();
         $layout->type = $elementType;
 
+        $tab = new FieldLayoutTab();
+        $tab->name = 'Content';
+        // The tab needs its owning layout before elements/config are read.
+        $tab->setLayout($layout);
+
         $elements = [];
+        // In Craft 5 the entry title is a field-layout element; include it so
+        // titles are editable/persisted when the entry type shows a title.
+        if ($includeTitle && $elementType === Entry::class) {
+            $elements[] = new EntryTitleField();
+        }
         foreach ($fieldHandles as $entry) {
             $handle = is_array($entry) ? ($entry['handle'] ?? null) : $entry;
             $required = is_array($entry) ? (bool)($entry['required'] ?? false) : false;
@@ -156,8 +173,6 @@ class StructureTool
             $elements[] = $ce;
         }
 
-        $tab = new FieldLayoutTab();
-        $tab->name = 'Content';
         $tab->setElements($elements);
         $layout->setTabs([$tab]);
 
