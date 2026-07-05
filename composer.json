@@ -1,0 +1,49 @@
+{
+    "name": "gerry3010/craft-mcp",
+    "description": "A Craft CMS 5 plugin that exposes an in-process MCP (Model Context Protocol) server so AI agents can control Craft as fully as possible.",
+    "type": "craft-plugin",
+    "license": "MIT",
+    "keywords": [
+        "craft",
+        "craftcms",
+        "craft-plugin",
+        "mcp",
+        "model-context-protocol",
+        "ai",
+        "agent"
+    ],
+    "support": {
+        "source": "https://github.com/Gerry3010/craft-mcp",
+        "issues": "https://github.com/Gerry3010/craft-mcp/issues"
+    },
+    "require": {
+        "php": ">=8.2",
+        "craftcms/cms": "^5.0.0"
+    },
+    "require-dev": {
+        "craftcms/phpstan": "dev-main",
+        "craftcms/ecs": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "gerry3010\\mcp\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "mcp",
+        "name": "Craft MCP",
+        "class": "gerry3010\\mcp\\Plugin",
+        "developer": "Gerald Hofbauer",
+        "documentationUrl": "https://github.com/Gerry3010/craft-mcp"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}

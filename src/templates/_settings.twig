@@ -1,0 +1,35 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.lightswitchField({
+    label: 'Enable MCP endpoint',
+    instructions: 'Serve the MCP server at POST /mcp. Turn off to disable all remote access at once.',
+    id: 'enabled',
+    name: 'enabled',
+    on: settings.enabled,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Allow schema-write tools',
+    instructions: 'Safety switch for structural changes (fields, entry types, sections). Per-operation confirm still applies.',
+    id: 'allowSchemaWrite',
+    name: 'allowSchemaWrite',
+    on: settings.allowSchemaWrite,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Allow system-write tools',
+    instructions: 'Safety switch for system changes (users, project config, plugins, garbage collection). Per-operation confirm still applies.',
+    id: 'allowSystemWrite',
+    name: 'allowSystemWrite',
+    on: settings.allowSystemWrite,
+}) }}
+
+<hr>
+
+<p class="light">
+    Create tokens on the CLI:
+    <code>php craft mcp/tokens/create --user=&lt;email&gt; --label="Claude" --ttl-days=90</code><br>
+    Every tool call runs as the token's Craft user and is bounded by that user's permissions.
+    Structural &amp; system operations additionally require an admin user and an explicit
+    <code>confirm: true</code> argument.
+</p>
