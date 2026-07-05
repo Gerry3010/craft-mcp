@@ -56,9 +56,10 @@ class TokensController extends Controller
 
         $result = Auth::createToken($user->id, $this->label, $this->ttlDays);
 
-        $this->stdout("\nMCP token for {$user->email} (id {$user->id}):\n\n", Console::FG_GREEN);
+        $this->stdout("\nMCP token #{$result['id']} for {$user->email}:\n\n", Console::FG_GREEN);
         $this->stdout("  {$result['token']}\n\n", Console::FG_YELLOW);
         $this->stdout('Expires: ' . ($result['expiresAt'] ?? 'never') . "\n");
+        $this->stdout("Revoke with: craft mcp/tokens/revoke {$result['id']}\n");
         $this->stdout("Store it now — it is not shown again.\n\n");
         $this->stdout("Claude Code / Warp connect via:\n");
         $this->stdout("  npx -y mcp-remote@latest <site-url>/mcp --header \"Authorization: Bearer {$result['token']}\"\n\n");

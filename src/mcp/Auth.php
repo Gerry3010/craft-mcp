@@ -41,6 +41,7 @@ class Auth
         ]);
 
         return [
+            'id' => (int)Craft::$app->getDb()->getLastInsertID(),
             'token' => $raw,
             'expiresAt' => $expiresAt?->format(DATE_ATOM),
         ];
